@@ -145,10 +145,16 @@ export class Client {
 
     this.maximumPartSize = 5*1024*1024*1024
     this.maxObjectSize = 5*1024*1024*1024*1024
-    // SHA256 is enabled only for authenticated http requests. If the request is authenticated
-    // and the connection is https we use x-amz-content-sha256=UNSIGNED-PAYLOAD
-    // header for signature calculation.
-    this.enableSHA256 = !this.anonymous && !params.useSSL
+    
+    // Provide way to override enableSHA256
+    if(params.enableSHA256 !== undefined) {
+      this.enableSHA256 = JSON.parse(params.enableSHA256);
+    } else {
+      // SHA256 is enabled only for authenticated http requests. If the request is authenticated
+      // and the connection is https we use x-amz-content-sha256=UNSIGNED-PAYLOAD
+      // header for signature calculation.
+      this.enableSHA256 = !this.anonymous && !params.useSSL
+    }
 
     this.reqOptions = {}
   }
